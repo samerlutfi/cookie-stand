@@ -1,6 +1,10 @@
 'use strict';
 let allStands = [];
-let times = ['08 am', '09 am', '10 am', '11 am', '12 pm', '01 pm', '02 pm', '03 pm', '04 pm', '05 pm', '06 pm', '07 pm'];
+let times = ['8:00am', '9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm', '6:00pm', '7:00pm'];
+let container = document.getElementById('seattle_shop');
+let tableEl = document.createElement('table');
+container.appendChild(tableEl);
+
 
 function randomCustomer(min, max) {
   min = Math.ceil(min);
@@ -15,6 +19,7 @@ function Stands(name, minCus, maxCus, Avg) {
   this.Avg = Avg;
   this.randomCustomerNumbers = [];
   this.cookiesNumber = [];
+  this.totalCookies=0;
 
   allStands.push(this);
 }
@@ -22,32 +27,74 @@ Stands.prototype.getingRandomCustomer = function () {
   for (let i = 0; i < times.length; i++) {
     let value = randomCustomer(this.minCus, this.maxCus);
     this.randomCustomerNumbers.push(value);
-    this.cookiesNumber.push(this.randomCustomerNumbers[i] * this.Avg);
+    this.cookiesNumber.push(parseInt(this.randomCustomerNumbers[i] * this.Avg));
   }
 
 };
 Stands.prototype.render = function () {
-  let divEl = document.getElementById('seattle_shop');
-  let artcleEl = document.createElement('article');
-  divEl.appendChild(artcleEl);
-
-  let h1El = document.createElement('h1');
-  artcleEl.appendChild(h1El);
-  h1El.textContent = this.name;
-
-  let ulEl = document.createElement('ul');
-  let totalCookies = 0;
-  for (let i = 0; i < this.cookiesNumber.length; i++) {
-    totalCookies += parseInt(this.cookiesNumber[i]);
-    let liEl = document.createElement('li');
-    liEl.textContent = `${times[i]}:${parseInt(this.cookiesNumber[i])} cookies`;
-    ulEl.appendChild(liEl);
+  let trEl=document.createElement('tr');
+  let tdEl=document.createElement('td');
+  trEl.appendChild(tdEl);
+  tdEl.textContent=this.name;
+  for (let i = 0; i < times.length; i++) {
+    this.totalCookies+=this.cookiesNumber[i];
+    let tdEl=document.createElement('td');
+    trEl.appendChild(tdEl);
+    tdEl.textContent=this.cookiesNumber[i];
+    tableEl.appendChild(trEl);
   }
-  let liEl = document.createElement('li');
-  liEl.textContent = `Total:${totalCookies} cookies`;
-  ulEl.appendChild(liEl);
-  artcleEl.appendChild(ulEl);
+  let tdEl1=document.createElement('td');
+  trEl.appendChild(tdEl1);
+  tdEl1.textContent=this.totalCookies;
+
 };
+
+function createtableHeader() {
+  let trEl=document.createElement('tr');
+  let thEl=document.createElement('th');
+  trEl.appendChild(thEl);
+  thEl.textContent='shop';
+  tableEl.appendChild(trEl);
+  for (let i = 0; i < times.length; i++) {
+    let thEl=document.createElement('th');
+    thEl.textContent=times[i];
+    trEl.appendChild(thEl);
+
+  }
+  let thEl1=document.createElement('th');
+  trEl.appendChild(thEl1);
+  thEl1.textContent='Daily Location Total';
+}
+
+function createFooter(){
+  let tfootEl = document.createElement('tfoot');
+  let tdEl = document.createElement('td');
+  tdEl.textContent = 'Totals';
+  tfootEl.appendChild(tdEl);
+  tableEl.appendChild(tfootEl);
+  let allTotal = 0;
+  //h = 0 hour = 6 am
+  for (let h = 0; h < times.length; h++) {
+    let tdEl = document.createElement('td');
+    let sum = 0;
+
+    for (let s = 0; s < allStands.length; s++) {
+
+      sum = sum + allStands[s].cookiesNumber[h];
+    }
+    allTotal += sum;
+    tdEl.textContent = sum;
+    tfootEl.appendChild(tdEl);
+  }
+  let totalTdEl = document.createElement('td');
+  totalTdEl.textContent = allTotal;
+  tfootEl.appendChild(totalTdEl);
+}
+
+
+
+
+createtableHeader();
 
 
 let seattle = new Stands('seattle', 23, 65, 6.3);
@@ -69,6 +116,7 @@ Paris.render();
 let Lima = new Stands('Lima', 2, 16, 4.6);
 Lima.getingRandomCustomer();
 Lima.render();
+createFooter();
 
 
 
