@@ -2,7 +2,9 @@
 
 header {
     background-color: burlywood;
-    height: 120px;   
+    height: 120px; 
+    position: sticky;  
+    top:0
 }
 
 
@@ -31,7 +33,7 @@ header nav {
 }
 .salmon{
     display: block;
-    margin-left: 670px;
+    margin-left: 340px;
     margin-right: auto;
      
 }
