@@ -73,7 +73,6 @@ function createFooter(){
   tfootEl.appendChild(tdEl);
   tableEl.appendChild(tfootEl);
   let allTotal = 0;
-  //h = 0 hour = 6 am
   for (let h = 0; h < times.length; h++) {
     let tdEl = document.createElement('td');
     let sum = 0;
@@ -117,6 +116,23 @@ let Lima = new Stands('Lima', 2, 16, 4.6);
 Lima.getingRandomCustomer();
 Lima.render();
 createFooter();
+
+let myForm=document.getElementById('myForm');
+myForm.addEventListener('submit', addBran);
+function addBran(event){
+  event.preventDefault();
+  console.log('hello');
+  let name=event.target.branchname.value;
+  let minCus=event.target.numberofminimumCus.value;
+  let maxi=event.target.numberofmaximumCus.value;
+  let Avg=event.target.numberofAverage.value;
+  let newbranchh= new Stands(name,minCus,maxi,Avg);
+  console.log(newbranchh);
+  newbranchh.getingRandomCustomer();
+  newbranchh.render();
+
+}
+
 
 
 
